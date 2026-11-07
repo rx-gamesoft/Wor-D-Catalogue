@@ -1,0 +1,32 @@
+﻿{
+    "schemaVersion":  2,
+    "contentVersion":  2026110603,
+    "minEngineVersion":  "1.0.0",
+    "version":  3,
+    "timestamp":  1794024511447,
+    "phrasesCount":  1200,
+    "categoriesCount":  12,
+    "sha256":  "ab737e8b9951d0ec952f06813a8cd3099c869a898f98c7ec8f0a69db9f15d790",
+    "signatureFile":  "phrases.json.sig",
+    "categories":  [
+                       "paises",
+                       "refranes",
+                       "peliculas",
+                       "ciencia",
+                       "literatura",
+                       "television",
+                       "animales",
+                       "comidas",
+                       "profesiones",
+                       "marcas",
+                       "objetos",
+                       "colores"
+                   ],
+    "verification":  {
+                         "pegiRating":  3,
+                         "curve":  "secp256r1",
+                         "minIntegrityRatio":  0.9,
+                         "algorithm":  "SHA256withECDSA",
+                         "minQuorum":  50
+                     }
+}

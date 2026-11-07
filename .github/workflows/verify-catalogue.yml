@@ -1,0 +1,49 @@
+name: Verify Word-D Public Catalogue
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate-schema:
+    name: Validate JSON Schema and Integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Validation Dependencies
+        run: pip install jsonschema
+
+      - name: Validate phrases.json against Schema
+        run: |
+          python -c "
+          import json, jsonschema, sys
+
+          with open('schema/phrase_schema.json', 'r', encoding='utf-8') as sf:
+              schema = json.load(sf)
+          with open('catalogue/phrases.json', 'r', encoding='utf-8') as df:
+              data = json.load(sf_data := df)
+
+          jsonschema.validate(instance=data, schema=schema)
+          print(f'SUCCESS: Validated {len(data[\"phrases\"])} phrases and {len(data[\"categories\"])} categories.')
+          "
+
+      - name: Check SHA-256 Hash against Manifest
+        run: |
+          ACTUAL_HASH=$(sha256sum catalogue/phrases.json | awk '{print $1}')
+          MANIFEST_HASH=$(python -c "import json; print(json.load(open('catalogue/catalogue_manifest.json'))['sha256'])")
+          echo "Actual SHA-256:   $ACTUAL_HASH"
+          echo "Manifest SHA-256: $MANIFEST_HASH"
+          if [ "$ACTUAL_HASH" != "$MANIFEST_HASH" ]; then
+            echo "ERROR: SHA-256 mismatch between catalogue/phrases.json and catalogue_manifest.json!"
+            exit 1
+          fi
+          echo "Hash verification passed."

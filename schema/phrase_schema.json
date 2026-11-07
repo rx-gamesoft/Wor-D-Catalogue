@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WordDCatalogue",
+  "description": "Esquema formal para el catálogo público de frases de Word-D con soporte para versionado de esquema, versiones de contenido y metadatos dinámicos para modos de juego.",
+  "type": "object",
+  "required": ["version", "categories", "phrases"],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Versión del esquema estructural (ej. v2)"
+    },
+    "contentVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Versión semántica o temporal del contenido del catálogo (ej. 2026110601)"
+    },
+    "minEngineVersion": {
+      "type": "string",
+      "description": "Versión mínima requerida del motor de juego para interpretar este catálogo"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Campo de compatibilidad legado para clientes v1"
+    },
+    "timestamp": {
+      "type": "integer"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "displayName"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]{3,24}$"
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 40
+          },
+          "description": {
+            "type": "string"
+          },
+          "iconKey": {
+            "type": "string"
+          },
+          "colorHex": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          }
+        }
+      }
+    },
+    "phrases": {
+      "type": "array",
+      "minItems": 50,
+      "items": {
+        "type": "object",
+        "required": ["id", "text", "category", "difficulty", "hint"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]{3,32}$"
+          },
+          "text": {
+            "type": "string",
+            "pattern": "^[A-ZÁÉÍÓÚÑ0-9 ]{3,80}$"
+          },
+          "category": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "hint": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 120
+          },
+          "language": {
+            "type": "string",
+            "default": "es"
+          },
+          "translation": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer"
+          },
+          "timeLimitSeconds": {
+            "type": ["integer", "string"]
+          },
+          "author": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}
